@@ -100,7 +100,7 @@ export default {
     isShowTimes () {
       let lastTime = new Date(0)
       return this.messages.map(message => {
-        const messageTime = message.time instanceof Date ? message.time : new Date(messege.time)
+        const messageTime = message.time instanceof Date ? message.time : new Date(message.time)
 
         if (differenceInMinutes(messageTime, lastTime) > 10) {
           lastTime = messageTime
