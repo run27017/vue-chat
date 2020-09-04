@@ -1,28 +1,48 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <ChatBox ref="chat" 
+      :sourceAvatar="sourceAvatar" :targetAvatar="targetAvatar" 
+      :loadHistory="loadHistory" :sendMessage="sendMessage" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ChatBox from '@/components/chat'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    ChatBox
+  },
+  data () {
+    return {
+      sourceAvatar: 'https://gitee.com/run27017/assets/raw/master/avatars/girl.jpg',
+      targetAvatar: 'https://gitee.com/run27017/assets/raw/master/avatars/bear.jpg'
+    }
+  },
+  methods: {
+    loadHistory () {
+      return { 
+        messages: [
+          { text: 'Hello, who are you?', time: new Date(2020, 9, 4), direction: 'sent' },
+          { text: "Hey, I'm a bear!", time: new Date(2020, 9, 4), direction: 'received' }
+        ], 
+        hasMore: false 
+      }
+    },
+    sendMessage ({ text }) {
+      return {
+        text,
+        time: new Date(),
+        direction: 'sent'
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  height: 600px;
 }
 </style>
