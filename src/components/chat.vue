@@ -42,12 +42,20 @@ import differenceInYears from 'date-fns/differenceInYears'
 import isSameDay from 'date-fns/isSameDay'
 
 import InfiniteLoading from 'vue-infinite-loading'
-import 'vant/lib/index.css'
+import VanButton from 'vant/lib/button'
+import 'vant/lib/button/style'
+import VanImage from 'vant/lib/image'
+import 'vant/lib/image/style'
+import VanField from 'vant/lib/field'
+import 'vant/lib/field/style'
 
 export default {
   name: 'Chat',
   components: {
-    InfiniteLoading
+    InfiniteLoading,
+    'van-button': VanButton,
+    'van-image': VanImage,
+    'van-field': VanField
   },
   filters: {
     accordingToNow (date) {
