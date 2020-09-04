@@ -12,7 +12,7 @@
         </InfiniteLoading>
         <div v-for="message, index in messages">
           <div class="message-prompt" v-if="isShowTimes[index]">
-            {{ message.time | beauty-time }}
+            {{ message.time | according-to-now }}
           </div>
           <div class="message-cell" 
             :style="{ flexDirection: message.direction === 'received' ? 'row' : 'row-reverse' }" >
@@ -34,8 +34,15 @@
 </template>
 
 <script>
-import moment from 'moment'
+import zhCode from 'date-fns/locale/zh-CN'
+import format from 'date-fns/format'
+import formatDistance from 'date-fns/formatDistance'
+import differenceInMinutes from 'date-fns/differenceInMinutes'
+import differenceInYears from 'date-fns/differenceInYears'
+import isSameDay from 'date-fns/isSameDay'
+
 import InfiniteLoading from 'vue-infinite-loading'
+import 'vant/lib/index.css'
 
 export default {
   name: 'Chat',
@@ -43,13 +50,18 @@ export default {
     InfiniteLoading
   },
   filters: {
-    beautyTime: function (value) {
-      if (moment().diff(value, 'days') < 1) {
-        return moment(value).locale('zh-CN').format('hh:mm')
-      } else if (moment().diff(value, 'years') < 1) {
-        return moment(value).locale('zh-CN').format('MM-DD hh:mm')
+    accordingToNow (date) {
+      date = date instanceof Date ? date : new Date(date)
+      const now = new Date()
+
+      if (differenceInMinutes(now, date) <= 30) {
+        return formatDistance(new Date(date), now, { locale: zhCode, addSuffix: true })
+      } else if (isSameDay(now, date)) {
+        return format(date, 'p', { locale: zhCode })
+      } else if (differenceInYears(now, date) < 1) {
+        return format(date, 'MMM do p', { locale: zhCode })
       } else {
-        return moment(value).locale('zh-CN').format('YYYY-MM-DD hh:mm')
+        return format(date, 'PPP p', { locale: zhCode })
       }
     }
   },
@@ -78,17 +90,17 @@ export default {
   },
   computed: {
     isShowTimes () {
-      let previousShowTime = new Date(0)
-      const showTimes = []
-      for (const message of this.messages) {
-        if (moment(message.time).diff(previousShowTime, 'minutes') > 10) {
-          showTimes.push(true)
-          previousShowTime = message.time
+      let lastTime = new Date(0)
+      return this.messages.map(message => {
+        const messageTime = message.time instanceof Date ? message.time : new Date(messege.time)
+
+        if (differenceInMinutes(messageTime, lastTime) > 10) {
+          lastTime = messageTime
+          return true
         } else {
-          showTimes.push(false)
+          return false
         }
-      }
-      return showTimes
+      })
     }
   },
   methods: {

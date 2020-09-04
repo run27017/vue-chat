@@ -23,9 +23,11 @@ export default {
   methods: {
     loadHistory () {
       return { 
+        // 倒序
         messages: [
-          { text: 'Hello, who are you?', time: new Date(2020, 9, 4), direction: 'sent' },
-          { text: "Hey, I'm a bear!", time: new Date(2020, 9, 4), direction: 'received' }
+          { text: "Really cute!", time: new Date(2020, 8, 4), direction: 'sent' },
+          { text: "Hey, I'm a bear!", time: new Date(2020, 7, 4), direction: 'received' },
+          { text: 'Hello, who are you?', time: new Date(2020, 7, 4), direction: 'sent' },
         ], 
         hasMore: false 
       }
